@@ -22,7 +22,40 @@ const run = async () => {
   try {
     // DB connection
     await client.connect();
-    console.log("Success");
+    const database = client.db("Touropia");
+    const serviceCollection = database.collection("services");
+    const bookingCollection = database.collection("userBooking");
+
+    // POST api (sending data feom UI to server)
+    app.post("/services", async (req, res) => {
+      const newService = req.body;
+      const result = await serviceCollection.insertOne(newService);
+      res.json(result);
+    });
+    // POST api (sending booking details to server)
+    app.post("/booking", async (req, res) => {
+      const newBooking = req.body;
+      const result = await bookingCollection.insertOne(newBooking);
+      res.json(result);
+    });
+    // Get Api (Loading service data from server)
+    app.get("/services", async (req, res) => {
+      const services = await serviceCollection.find({}).toArray();
+      res.send(services);
+    });
+    // Get Api (Loading booking data from server)
+    app.get("/booking", async (req, res) => {
+      const booking = await bookingCollection.find({}).toArray();
+      res.send(booking);
+    });
+
+    // Load data dynamically
+    app.get("/services/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const service = await serviceCollection.findOne(query);
+      res.send(service);
+    });
   } finally {
     // await client.close();
   }
