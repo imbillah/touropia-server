@@ -56,6 +56,13 @@ const run = async () => {
       const service = await serviceCollection.findOne(query);
       res.send(service);
     });
+    // load data by user email
+    app.get('/mybooking/:email', async(req, res)=>{
+      const result = await bookingCollection.find({
+        email: req.params.email
+      }).toArray()
+      res.send(result)
+    })
   } finally {
     // await client.close();
   }
