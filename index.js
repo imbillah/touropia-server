@@ -56,6 +56,7 @@ const run = async () => {
       const service = await serviceCollection.findOne(query);
       res.send(service);
     });
+
     // load data by user email
     app.get('/mybooking/:email', async(req, res)=>{
       const result = await bookingCollection.find({
@@ -71,8 +72,8 @@ const run = async () => {
 run().catch(console.dir);
 
 app.get("/", (req, res) => {
-  res.send("Running Product Server");
+  res.send("Running Travel Server");
 });
 app.listen(port, () => {
-  console.log(`Running server on port ${port}`);
+  console.log(`Running my server on port ${port}`);
 });
