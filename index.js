@@ -57,12 +57,28 @@ const run = async () => {
       res.send(service);
     });
 
+    // Load booking data by id
+    app.get('/booking/:id', async(req, res)=>{
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const booking = await bookingCollection.findOne(query);
+      res.send(booking);
+    })
+
     // load data by user email
     app.get('/mybooking/:email', async(req, res)=>{
       const result = await bookingCollection.find({
         email: req.params.email
       }).toArray()
       res.send(result)
+    })
+    
+    // DELETE api(deleting data from server)
+    app.delete('/booking/:id', async(req, res)=>{
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const result = await bookingCollection.deleteOne(query);
+      res.send(result);
     })
   } finally {
     // await client.close();
